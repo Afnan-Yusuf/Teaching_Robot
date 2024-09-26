@@ -14,7 +14,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 void drawEye(bool blink, float blinkProgress = 0);
 void drawEllipse(Adafruit_SSD1306 &display, int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color);
 
-void setup() {
+void initeyedisplay() {
   Serial.begin(9600);
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
@@ -27,7 +27,7 @@ void setup() {
   display.clearDisplay();
 }
 
-void loop() {
+void eyeblink() {
   // Open eye
   drawEye(false);
   delay(3000);
