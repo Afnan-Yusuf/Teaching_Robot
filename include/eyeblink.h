@@ -12,6 +12,15 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+// Time management variables for non-blocking delays
+unsigned long previousMillis = 0;  // Store the last time the eye state was updated
+const long openEyeDuration = 3000; // Eye open duration in milliseconds
+const long blinkStepDelay = 40;    // Blink animation delay per step in milliseconds
+
+int blinkStep = 0;
+bool eyeIsOpen = true;
+bool isBlinking = false;
+
 // Function prototypes
 void drawEye(bool blink, float blinkProgress = 0);
 void drawEllipse(Adafruit_SSD1306 &display, int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color);
@@ -19,9 +28,9 @@ void drawEllipse(Adafruit_SSD1306 &display, int16_t x0, int16_t y0, int16_t rx, 
 void initeyedisplay() {
   Serial.begin(9600);
 
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
+    for (;;);
   }
 
   display.display();
@@ -30,23 +39,35 @@ void initeyedisplay() {
 }
 
 void eyeblink() {
-  // Open eye
-  drawEye(false);
-  delay(3000);
+  unsigned long currentMillis = millis();
 
-  // Blink
-  for (int i = 0; i <= 10; i++) {
-    drawEye(true, i * 0.1);
-    delay(20);
-  }
-  for (int i = 10; i >= 0; i--) {
-    drawEye(true, i * 0.1);
-    delay(20);
-  }
+  if (eyeIsOpen && !isBlinking) {
+    // Keep the eye open for 3000 ms
+    if (currentMillis - previousMillis >= openEyeDuration) {
+      previousMillis = currentMillis;
+      isBlinking = true;  // Start blinking
+      blinkStep = 0;      // Reset blink step
+    }
+    drawEye(false);  // Draw open eye
+  } 
+  else if (isBlinking) {
+    // Manage blink animation
+    if (currentMillis - previousMillis >= blinkStepDelay) {
+      previousMillis = currentMillis;
 
-  // Open eye again
-  drawEye(false);
-  delay(3000);
+      if (blinkStep <= 10) {
+        drawEye(true, blinkStep * 0.1);  // Closing the eye
+        blinkStep++;
+      } else if (blinkStep <= 20) {
+        drawEye(true, (20 - blinkStep) * 0.1);  // Opening the eye
+        blinkStep++;
+      } else {
+        isBlinking = false;  // Stop blinking
+        eyeIsOpen = true;    // Reset to open state
+        previousMillis = currentMillis;  // Reset timer for next open period
+      }
+    }
+  }
 }
 
 void drawEye(bool blink, float blinkProgress) {
@@ -57,8 +78,8 @@ void drawEye(bool blink, float blinkProgress) {
   int centerY = 32;  // Center of the display (Y axis)
   
   // New larger dimensions
-  int width = 90;    // Increased width of the eye
-  int height = 45;   // Increased height of the eye
+  int width = 120;    // Increased width of the eye
+  int height = 50;   // Increased height of the eye
   
   if (blink) {
     height = height * (1 - blinkProgress);  // Shrink eye height during blink
@@ -66,22 +87,19 @@ void drawEye(bool blink, float blinkProgress) {
   
   // Draw thicker outer eye outline by drawing multiple ellipses
   for (int i = 0; i < 3; i++) { // Loop to draw multiple ellipses for thickness (change 3 to higher for thicker line)
-    drawEllipse(display, centerX, centerY, (width/2) - i, (height/2) - i, WHITE);
+    drawEllipse(display, centerX, centerY, (width / 2) - i, (height / 2) - i, WHITE);
   }
   
   // Draw iris and pupil if eye is open enough
   if (height > 10) {
     // Increased iris size, making sure it fits in the eye
     int irisSize = min(height - 4, 30);  // Increased from 20 to 30 for a larger iris
-    display.fillCircle(centerX, centerY, irisSize/2, WHITE);  // Iris
-    display.fillCircle(centerX, centerY, irisSize/4, BLACK);  // Pupil
+    display.fillCircle(centerX, centerY, irisSize / 2, WHITE);  // Iris
+    display.fillCircle(centerX, centerY, irisSize / 4, BLACK);  // Pupil
   }
   
   display.display();
 }
-
-
-
 
 // Standalone function to draw an ellipse
 void drawEllipse(Adafruit_SSD1306 &display, int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color) {
