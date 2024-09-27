@@ -30,7 +30,6 @@ void btcontrol()
     
 }
  void recvWithEndMarker(){
-
         if (BT.available() > 0)
         {
             incomingData = BT.read();

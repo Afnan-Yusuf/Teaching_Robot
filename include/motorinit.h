@@ -79,7 +79,9 @@ void leftmotbackward(int spd)
     ledcWrite(mrbc, spd);
 }
 void rightmotbackward(int spd)
+
 {
     ledcWrite(mlfc, 0); // write all pwmm channel 0
     ledcWrite(mlbc, spd);
 }
+

@@ -3,13 +3,13 @@
 #include "motorinit.h"
 #include "ultrasonic.h"
 #include "blutooth.h"
-#include <TaskScheduler.h>
+//#include "scheduler.h"
+void obstacledetect();
 
 Scheduler ts; 
 Task eyeblinktask(TASK_IMMEDIATE, TASK_FOREVER, &eyeblink, &ts, false);
-Task bttask(TASK_IMMEDIATE, TASK_FOREVER, &btcontrol, &ts, false);
+Task bttask(TASK_IMMEDIATE, TASK_FOREVER, &btcontrol, &ts, false, NULL, &StopMot);
 Task readsensortask(TASK_IMMEDIATE, TASK_FOREVER, &obstacledetect, &ts, false);
-
 
 void setup() {
   Serial.begin(115200);
@@ -20,7 +20,8 @@ void setup() {
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
-  //eyeblinktask.enable();
+  
+  eyeblinktask.enable();
   bttask.enable();
 
 
@@ -28,5 +29,4 @@ void setup() {
 
 void loop() {
   ts.execute();
-  //obstacledeteect();
 }
