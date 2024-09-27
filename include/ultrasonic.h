@@ -1,6 +1,5 @@
 #pragma once
 #include <Arduino.h>
-bool onblutooth = false;
 void obstacledetect();
 #include "scheduler.h"
 int thresh = 20;
@@ -8,8 +7,9 @@ int thresh = 20;
 #define SENSORRIGHT_PIN 35  // Example: GPIO35 for right sensor
 
 
+bool onblutooth = false;
 
-void obstacledetect(bool onblutooth) {
+void obstacledetect() {
   // Read the analog values from both sensors
   int leftAnalogValue = analogRead(SENSORLEFT_PIN);  
   int rightAnalogValue = analogRead(SENSORRIGHT_PIN);  
