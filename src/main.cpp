@@ -14,6 +14,7 @@ void setup() {
   initeyedisplay();
   InitMot();
   initsharpir();
+  void rgbledinit();
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
