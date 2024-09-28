@@ -5,6 +5,7 @@
 #include "blutooth.h"
 #include "scheduler.h"
 #include "ultrasonic.h"
+#include "neopixel.h"
 
 
 
