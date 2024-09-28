@@ -6,6 +6,7 @@
 #include "scheduler.h"
 #include "ultrasonic.h"
 #include "neopixel.h"
+#include "arduinointerface.h"
 
 
 
@@ -15,13 +16,14 @@ void setup() {
   initeyedisplay();
   InitMot();
   initsharpir();
-  void rgbledinit();
+  rgbledinit();
+  initserial2();
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
   ts.addTask(readsensortask);
   
-  //eyeblinktask.enable();
+  eyeblinktask.enable();
   bttask.enable();
   readsensortask.enable();
   eyeblinktask.enable();
@@ -31,4 +33,5 @@ void setup() {
 
 void loop() {
   ts.execute();
+  arduinointerface();
 }
