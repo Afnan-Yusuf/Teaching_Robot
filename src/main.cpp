@@ -24,6 +24,7 @@ void setup() {
   //eyeblinktask.enable();
   bttask.enable();
   readsensortask.enable();
+  eyeblinktask.enable();
 
 
 }

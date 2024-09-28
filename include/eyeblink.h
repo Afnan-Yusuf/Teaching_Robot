@@ -26,7 +26,6 @@ void drawEye(bool blink, float blinkProgress = 0);
 void drawEllipse(Adafruit_SSD1306 &display, int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color);
 
 void initeyedisplay() {
-  Serial.begin(9600);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
