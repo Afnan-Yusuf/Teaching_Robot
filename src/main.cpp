@@ -17,9 +17,11 @@ void setup() {
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
+  ts.addTask(readsensortask);
   
-  eyeblinktask.enable();
+  //eyeblinktask.enable();
   bttask.enable();
+  readsensortask.enable();
 
 
 }
