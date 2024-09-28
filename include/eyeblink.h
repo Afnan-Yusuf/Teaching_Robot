@@ -139,7 +139,7 @@ void eyeblink() {
     previousMillis = currentMillis;
     eyeIsOpen = false;
     display.clearDisplay();
-    display.drawBitmap(0, 0, realisticEyeClosed, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, eyeClosed, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
     delay(blinkDuration);
     eyeIsOpen = true;
@@ -147,7 +147,7 @@ void eyeblink() {
 
   if (eyeIsOpen) {
     display.clearDisplay();
-    display.drawBitmap(0, 0, realisticEyeOpen, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, eyeOpen, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
   }
 }
