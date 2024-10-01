@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-#define LED_PIN 6
+#define LED_PIN 23
 #define LED_COUNT 16
 Adafruit_NeoPixel rgbled(LED_COUNT, LED_PIN, NEO_RGBW + NEO_KHZ800);
 void rgbledinit()

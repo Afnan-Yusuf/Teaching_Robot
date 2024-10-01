@@ -1,15 +1,15 @@
 #pragma once
 #include <Arduino.h>
-#define motlf 16 // motor pins
-#define motlb 17
-#define motrf 18
-#define motrb 19
+#define motlf 13 // motor pins
+#define motlb 14
+#define motrf 27
+#define motrb 26
 
 const int freqm = 4000; // motor pwm frequency
 const int mrfc = 0;     // Motor Right Forward Channel (mrfc)
-const int mrbc = 2;     // Motor Right Backward Channel (mrbc)
-const int mlfc = 4;     // Motor Left Forward Channel (mlfc)
-const int mlbc = 6;     //
+const int mrbc = 1;     // Motor Right Backward Channel (mrbc)
+const int mlfc = 2;     // Motor Left Forward Channel (mlfc)
+const int mlbc = 3;     //
 const int mpwmr = 8;    // motor pwm resolution(8bit)
 
 void InitMot()

@@ -13,25 +13,24 @@
 void setup() {
   Serial.begin(115200);
   initbt();
-  initeyedisplay();
+  //initeyedisplay();
   InitMot();
   initsharpir();
   rgbledinit();
-  initserial2();
+  //initserial2();
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
   ts.addTask(readsensortask);
   
-  eyeblinktask.enable();
+  //eyeblinktask.enable();
   bttask.enable();
   readsensortask.enable();
-  eyeblinktask.enable();
 
 
 }
 
 void loop() {
   ts.execute();
-  arduinointerface();
+ // arduinointerface();
 }

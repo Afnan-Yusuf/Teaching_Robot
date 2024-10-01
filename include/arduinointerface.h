@@ -5,7 +5,6 @@
 
 void initserial2()
 {
-    Serial.begin(9600);
     Serial2.begin(115200, SERIAL_8N1, RXD2, TXD2);
 }
 
