@@ -7,6 +7,7 @@
 #include "ultrasonic.h"
 #include "neopixel.h"
 #include "arduinointerface.h"
+#include "headservo.h"
 
 
 
@@ -16,6 +17,7 @@ void setup() {
   initeyedisplay();
   InitMot();
   initsharpir();
+  headservoinit();
   rgbledinit();
   //initserial2();
 
