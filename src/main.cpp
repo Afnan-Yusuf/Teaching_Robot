@@ -13,7 +13,7 @@
 void setup() {
   Serial.begin(115200);
   initbt();
-  //initeyedisplay();
+  initeyedisplay();
   InitMot();
   initsharpir();
   rgbledinit();
@@ -33,4 +33,5 @@ void setup() {
 void loop() {
   ts.execute();
  // arduinointerface();
+  rgbledcontrol();
 }
