@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 void obstacledetect();
-int thresh = 20;
+int thresh = 30;
 #define SENSORLEFT_PIN 34  // Example: GPIO34 for left sensor
 #define SENSORRIGHT_PIN 35  // Example: GPIO35 for right sensor
 
