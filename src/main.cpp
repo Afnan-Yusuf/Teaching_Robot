@@ -15,7 +15,7 @@ void setup() {
   Serial.begin(115200);
   initbt();
   initeyedisplay();
-  InitMot();
+  //InitMot();
   initsharpir();
   headservoinit();
   rgbledinit();
@@ -28,6 +28,7 @@ void setup() {
   //eyeblinktask.enable();
   bttask.enable();
   readsensortask.enable();
+  initmottask.enableDelayed(2000);
 
 
 }

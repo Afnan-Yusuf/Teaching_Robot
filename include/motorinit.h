@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #define motlf 13 // motor pins
-#define motlb 14
+#define motlb 12
 #define motrf 27
 #define motrb 26
 
