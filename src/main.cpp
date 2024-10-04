@@ -29,6 +29,7 @@ void setup() {
   bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);
+  servosweeptask.enable();
 
 
 }
