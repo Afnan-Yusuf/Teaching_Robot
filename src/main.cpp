@@ -8,6 +8,7 @@
 #include "neopixel.h"
 #include "arduinointerface.h"
 #include "headservo.h"
+#include "ct6b.h"
 
 
 
@@ -20,16 +21,17 @@ void setup() {
   headservoinit();
   rgbledinit();
   //initserial2();
+  initct6b();
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
   ts.addTask(readsensortask);
   
   //eyeblinktask.enable();
-  bttask.enable();
+  //bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);
-  servosweeptask.enable();
+  //servosweeptask.enable();
 
 
 }
@@ -38,4 +40,5 @@ void loop() {
   ts.execute();
  // arduinointerface();
   rgbledcontrol();
+  runonct6b();
 }
