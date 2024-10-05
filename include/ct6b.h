@@ -2,9 +2,9 @@
 
 const byte interruptPin = 33;
 const byte channelAmount = 6;
-const unsigned long blankTime = 3750;
+const unsigned long blankTime = 4000;
 const unsigned long failsafeTimeout = 21000;
-const unsigned long minPulseTime = 900;   // Minimum valid pulse width (in microseconds)
+const unsigned long minPulseTime = 800;   // Minimum valid pulse width (in microseconds)
 const unsigned long maxPulseTime = 2100;  // Maximum valid pulse width (in microseconds)
 
 volatile unsigned long lastPulseTime = 0;
@@ -30,7 +30,6 @@ void IRAM_ATTR handlePPMInterrupt() {
 }
 
 void initct6b() {
-    Serial.begin(115200);
     pinMode(interruptPin, INPUT);
     attachInterrupt(digitalPinToInterrupt(interruptPin), handlePPMInterrupt, RISING);
 }
