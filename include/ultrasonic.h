@@ -27,10 +27,10 @@ void obstacledetect() {
     obstacledetected = false;
   }
 
-  // Serial.print("Left Distance: ");
-  //  Serial.print(leftDistance);
-  //  Serial.print(" cm, Right Distance: ");
-  //  Serial.println(rightDistance);
+   Serial.print("Left Distance: ");
+    Serial.print(leftDistance);
+    Serial.print(" cm, Right Distance: ");
+    Serial.println(rightDistance);
 }
 void initsharpir() {
   pinMode(SENSORLEFT_PIN, INPUT);   // Set left sensor pin as input
