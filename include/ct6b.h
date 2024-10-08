@@ -11,15 +11,16 @@ volatile unsigned long lastPulseTime = 0;
 volatile unsigned long rawValues[channelAmount];
 volatile byte currentChannel = 0;
 
-const int ch2max = 1970;
-const int ch2min = 1170;
+const int ch2max = 1965;
+const int ch2min = 1160;
 const int ch1max = 2000;
-const int ch1min = 1107;
+const int ch1min = 1100;
 const int ch3max = 1840;
 const int ch3min = 1048;
 
-int maxspeed = 190;
+int maxspeed = 255;
 int mimumnspeed = (-190);
+int slow = -255;
 
 int motleftspeed = 0;
 int motrightspeed = 0;
@@ -73,16 +74,16 @@ void runonct6b()
     {
         if (safeValues[i] >= minPulseTime && safeValues[i] <= maxPulseTime)
         {
-            //Serial.print(safeValues[i]);
+            // Serial.print(safeValues[i]);
         }
         else
         {
-            //Serial.print("Invalid"); // Show "Invalid" for any out-of-range value
+            // Serial.print("Invalid"); // Show "Invalid" for any out-of-range value
         }
-        //Serial.print("\t");
+        // Serial.print("\t");
     }
 
-    //Serial.println();
+    // Serial.println();
     delay(3);
 
     x = map(safeValues[0], ch1min, ch2max, 0, 510) - 255;
@@ -92,10 +93,51 @@ void runonct6b()
     z < 0 ? z = 0 : z = z;
     motleftspeed = x + y;
     motrightspeed = x - y;
+
+    motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
+    motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
+    motrightspeed < slow ? motrightspeed = slow : motrightspeed = motrightspeed;
+    motleftspeed < slow ? motleftspeed = slow : motleftspeed = motleftspeed;
+
+
+    if (x > 25 || x < -25 || y > 25 || y < -25)
+  {
+    if (motleftspeed > 0)
+    {
+      leftmotbackward(abs(motleftspeed));
+     
+    }
+    else if (motleftspeed < 0)
+    {
+
+      leftmotforward(abs(motleftspeed));
+  
+    }
+
+    if (motrightspeed > 0)
+    {
+      rightmotforward(abs(motrightspeed));
+
+    }
+    else if (motrightspeed < 0)
+    {
+      rightmotbackward(abs(motrightspeed));
+  
+    }
+  }
+  else
+  {
+    StopMot();
+  }
+
+
     Serial.print(x);
     Serial.print("\t");
     Serial.print(y);
     Serial.print("\t");
+    Serial.print(motleftspeed);
+    Serial.print("\t");
+    Serial.print(motrightspeed);
+    Serial.print("\t");
     Serial.println(z);
 }
-    
