@@ -28,10 +28,10 @@ void setup() {
   ts.addTask(readsensortask);
   
   eyeblinktask.enable();
-  //bttask.enable();
+  bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);
-  //servosweeptask.enable();
+  servosweeptask.enable();
 
 
 }
@@ -40,5 +40,5 @@ void loop() {
   ts.execute();
  // arduinointerface();
   rgbledcontrol();
-  runonct6b();
+ // runonct6b();
 }
