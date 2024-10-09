@@ -9,7 +9,7 @@
 Adafruit_NeoPixel rgbled(LED_COUNT, LED_PIN, NEO_RGBW + NEO_KHZ800);
 
 // Variables to keep track of time
-unsigned long previousMillis = 0;
+unsigned long pm1 = 0;
 
 void rgbledinit()
 {
@@ -24,9 +24,9 @@ void rgbledcontrol() {
   unsigned long currentMillis = millis(); // Get the current time
 
   // Check if enough time has passed to update the colors
-  if (currentMillis - previousMillis >= COLOR_CHANGE_INTERVAL) {
+  if (currentMillis - pm1 >= COLOR_CHANGE_INTERVAL) {
     // Save the last time the colors were updated
-    previousMillis = currentMillis;
+    pm1 = currentMillis;
 
     // Update the LED colors
     for (int i = 0; i < LED_COUNT; i++) {

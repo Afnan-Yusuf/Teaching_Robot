@@ -20,7 +20,7 @@ void setup() {
   initsharpir();
   headservoinit();
   rgbledinit();
-  //initserial2();
+  initserial2();
   initct6b();
 
   ts.addTask(eyeblinktask);
@@ -31,14 +31,14 @@ void setup() {
   bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);
-  servosweeptask.enable();
+  //servosweeptask.enable();
 
 
 }
 
 void loop() {
   ts.execute();
- // arduinointerface();
-  rgbledcontrol();
+  arduinointerface();
+ // rgbledcontrol();
  // runonct6b();
 }

@@ -7,7 +7,7 @@ int mode = 0;// 0 = walking; 1 = handshake; 2 = stop;
 
 void initserial2()
 {
-    Serial2.begin(115200, SERIAL_8N1, RXD2, TXD2);
+    Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
 }
 
 void arduinointerface(){
@@ -18,5 +18,5 @@ void arduinointerface(){
     }else if(mode == 2){
         Serial2.println('s');
     }
-    Serial2.println("HI");
+    delay(10);
 }
