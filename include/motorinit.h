@@ -6,10 +6,10 @@
 #define motrb 26
 
 const int freqm = 4000; // motor pwm frequency
-const int mrfc = 0;     // Motor Right Forward Channel (mrfc)
-const int mrbc = 1;     // Motor Right Backward Channel (mrbc)
-const int mlfc = 2;     // Motor Left Forward Channel (mlfc)
-const int mlbc = 3;     //
+const int mrfc = 4;     // Motor Right Forward Channel (mrfc)
+const int mrbc = 5;     // Motor Right Backward Channel (mrbc)
+const int mlfc = 6;     // Motor Left Forward Channel (mlfc)
+const int mlbc = 7;     //
 const int mpwmr = 8;    // motor pwm resolution(8bit)
 
 void InitMot()
