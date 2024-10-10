@@ -28,7 +28,7 @@ void setup() {
   ts.addTask(bttask);
   ts.addTask(readsensortask);
   
-  //eyeblinktask.enable();
+  eyeblinktask.enable();
   bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);

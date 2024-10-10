@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>
 #include <Ramp.h>
+#include "scheduler.h"
 //#include "ct6b.h"
 
 extern int z;
@@ -29,12 +30,12 @@ void headservoinit() {
 }
 
 void headservoSweep() {
-    myservo.write(z);
+    myservo.write(90);
 }
 
 void writeservo(int angle){
     finalpos = myramp.update();
-    myramp.go(angle, 500, LINEAR, ONCEFORWARD);
+    myramp.go(angle, 100, LINEAR, ONCEFORWARD);
     myservo.write(finalpos);
 
 }
