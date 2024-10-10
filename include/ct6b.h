@@ -3,7 +3,7 @@
 const byte interruptPin = 33;
 const byte channelAmount = 6;
 const unsigned long blankTime = 4000;
-const unsigned long failsafeTimeout = 21000;
+const unsigned long failsafeTimeout = 50000;
 const unsigned long minPulseTime = 800;  // Minimum valid pulse width (in microseconds)
 const unsigned long maxPulseTime = 2100; // Maximum valid pulse width (in microseconds)
 
@@ -15,8 +15,8 @@ const int ch2max = 1965;
 const int ch2min = 1160;
 const int ch1max = 2000;
 const int ch1min = 1100;
-const int ch3max = 1840;
-const int ch3min = 1048;
+const int ch3max = 1900;
+const int ch3min = 1055;
 
 int maxspeed = 255;
 int mimumnspeed = (-190);
@@ -88,11 +88,13 @@ void runonct6b()
 
     x = map(safeValues[0], ch1min, ch2max, 0, 510) - 255;
     y = map(safeValues[1], ch1min, ch1max, 0, 510) - 255;
-    z = map(safeValues[2], ch3min, ch3max, 0, 255);
-    z > 255 ? z = 255 : z = z;
+    z = map(safeValues[3], ch3min, ch3max, 0, 180);
+    z > 180 ? z = 180 : z = z;
     z < 0 ? z = 0 : z = z;
     motleftspeed = x - y;
     motrightspeed = x + y;
+    //Serial.println(safeValues[3]);
+    //writeservo(z);
 
     motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
     motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
@@ -105,6 +107,7 @@ void runonct6b()
     if (motleftspeed > 0)
     {
       leftmotbackward(abs(motleftspeed));
+      //Serial.println("yhn");
      
     }
     else if (motleftspeed < 0)
@@ -131,13 +134,13 @@ void runonct6b()
   }
 
 
-    // Serial.print(x);
-    // Serial.print("\t");
-    // Serial.print(y);
-    // Serial.print("\t");
-    // Serial.print(motleftspeed);
-    // Serial.print("\t");
-    // Serial.print(motrightspeed);
-    // Serial.print("\t");
-    // Serial.println(z);
+     Serial.print(x);
+     Serial.print("\t");
+     Serial.print(y);
+     Serial.print("\t");
+     Serial.print(motleftspeed);
+     Serial.print("\t");
+     Serial.print(motrightspeed);
+     Serial.print("\t");
+     Serial.println(z);
 }
