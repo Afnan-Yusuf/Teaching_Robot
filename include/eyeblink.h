@@ -4,7 +4,7 @@
 #include <Wire.h>
 
 // Create the display object for a 128x64 OLED using I2C
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE, /* clock=*/22, /* data=*/21);
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE, /* clock=*/22, /* data=*/21);
 
 int blinkDelay = 200;  // Time for eye to remain open
 int blinkCloseDuration = 2500;  // Time for eye to remain closed
@@ -19,11 +19,11 @@ void drawEyeOpen() {
   
   // Draw eye outline (maximize size with thicker lines)
   u8g2.setDrawColor(1);  // Set draw color to white
-  u8g2.drawEllipse(64, 32, 50, 25); // Large outer ellipse (eye outline)
-  u8g2.drawEllipse(64, 32, 49, 24); // Make the outline thicker
+  //u8g2.drawEllipse(64, 32, 50, 25); // Large outer ellipse (eye outline)
+  //u8g2.drawEllipse(64, 32, 49, 24); // Make the outline thicker
   
   // Draw pupil (larger pupil)
-  u8g2.drawDisc(64, 32, 10); // Larger pupil at center
+  u8g2.drawDisc(64, 32, 40); // Larger pupil at center
 
   u8g2.sendBuffer();
 }
