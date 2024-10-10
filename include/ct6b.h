@@ -91,8 +91,8 @@ void runonct6b()
     z = map(safeValues[2], ch3min, ch3max, 0, 255);
     z > 255 ? z = 255 : z = z;
     z < 0 ? z = 0 : z = z;
-    motleftspeed = x + y;
-    motrightspeed = x - y;
+    motleftspeed = x - y;
+    motrightspeed = x + y;
 
     motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
     motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
