@@ -16,19 +16,20 @@ void setup() {
   Serial.begin(115200);
   initbt();
   initeyedisplay();
-  //InitMot();
+  InitMot();
   initsharpir();
   headservoinit();
   rgbledinit();
   initserial2();
   initct6b();
+  //InitMot();
 
   ts.addTask(eyeblinktask);
   ts.addTask(bttask);
   ts.addTask(readsensortask);
   
-  eyeblinktask.enable();
-  //bttask.enable();
+  //eyeblinktask.enable();
+  bttask.enable();
   readsensortask.enable();
   initmottask.enableDelayed(2000);
   //servosweeptask.enable();
@@ -38,7 +39,8 @@ void setup() {
 
 void loop() {
   ts.execute();
-  arduinointerface();
+  //arduinointerface();
  // rgbledcontrol();
-  runonct6b();
+  //runonct6b();
+  headservoSweep();
 }
