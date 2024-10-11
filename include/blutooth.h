@@ -15,7 +15,7 @@ BluetoothSerial BT;
 int speed = 200;
 int minspeed = 50;
 int acceltime = 1750;
-int deceltime = 750;
+int deceltime = 500;
 int stopspeed = 0;
 int t;
 void recvWithEndMarker();
@@ -34,10 +34,13 @@ void btcontrol()
     Serial.print("\t");
     Serial.print(incomingData);
     Serial.print("\t");
-    Serial.println(prevdata);
-
-    if (!obstacledetected)
+    Serial.print(prevdata);
+    Serial.print("\t");
+    Serial.println(obstacledetected);
+    recvWithEndMarker();
+    if (obstacledetected == false)
     {
+        
         switch (incomingData)
         {
         case 'f': // Forward
@@ -99,6 +102,23 @@ void btcontrol()
             // Optionally handle unexpected input
             break;
         }
+    }else if (obstacledetected == true){
+        if(incomingData == 'b'){
+             t = 0;
+            myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
+            bk(t);
+            prevdata = incomingData;
+            incomingData = 0;
+        }else{
+            incomingData = 's';
+            prevdata = 's';
+            t = 0;
+            StopMot();
+        }
+        
+        
+
+        
     }
     
         // StopMot();  // Stop motors if an obstacle is detected
@@ -140,11 +160,8 @@ void btcontrol()
             }
         }
     }
-    recvWithEndMarker();
-    if(obstacledetected == true){
-        
-        StopMot();
-    }
+    
+    
    
 }
 
