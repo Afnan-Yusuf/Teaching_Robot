@@ -88,7 +88,7 @@ void runonct6b()
 
   x = map(safeValues[0], ch1min, ch2max, 510, 0) - 255;
   y = map(safeValues[1], ch1min, ch1max, 0, 510) - 255;
-  z = map(safeValues[3], ch3min, ch3max, 0, 180);
+  z = map(safeValues[3], ch3min, ch3max, 180, 0);
   z > 180 ? z = 180 : z = z;
   z < 0 ? z = 0 : z = z;
   motleftspeed = x + y;
