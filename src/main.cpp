@@ -41,6 +41,6 @@ void loop() {
   ts.execute();
   //arduinointerface();
  // rgbledcontrol();
-  //runonct6b();
+  runonct6b();
   headservoSweep();
 }

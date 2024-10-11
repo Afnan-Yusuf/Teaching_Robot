@@ -29,118 +29,115 @@ int x, y, z;
 
 void IRAM_ATTR handlePPMInterrupt()
 {
-    unsigned long currentMicros = micros();
-    unsigned long timeSinceLastPulse = currentMicros - lastPulseTime;
-    lastPulseTime = currentMicros;
+  unsigned long currentMicros = micros();
+  unsigned long timeSinceLastPulse = currentMicros - lastPulseTime;
+  lastPulseTime = currentMicros;
 
-    if (timeSinceLastPulse > blankTime)
+  if (timeSinceLastPulse > blankTime)
+  {
+    currentChannel = 0;
+  }
+  else
+  {
+    if (currentChannel < channelAmount)
     {
-        currentChannel = 0;
+      // Store the pulse duration only if it's within a valid range
+      if (timeSinceLastPulse >= minPulseTime && timeSinceLastPulse <= maxPulseTime)
+      {
+        rawValues[currentChannel] = timeSinceLastPulse;
+      }
+      currentChannel++;
     }
-    else
-    {
-        if (currentChannel < channelAmount)
-        {
-            // Store the pulse duration only if it's within a valid range
-            if (timeSinceLastPulse >= minPulseTime && timeSinceLastPulse <= maxPulseTime)
-            {
-                rawValues[currentChannel] = timeSinceLastPulse;
-            }
-            currentChannel++;
-        }
-    }
+  }
 }
 
 void initct6b()
 {
-    pinMode(interruptPin, INPUT);
-    attachInterrupt(digitalPinToInterrupt(interruptPin), handlePPMInterrupt, RISING);
+  pinMode(interruptPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), handlePPMInterrupt, RISING);
 }
 
 void runonct6b()
 {
-    unsigned long safeValues[channelAmount];
+  unsigned long safeValues[channelAmount];
 
-    // Disable interrupts to safely read shared values
-    noInterrupts();
-    for (byte i = 0; i < channelAmount; i++)
+  // Disable interrupts to safely read shared values
+  noInterrupts();
+  for (byte i = 0; i < channelAmount; i++)
+  {
+    safeValues[i] = rawValues[i];
+  }
+  interrupts();
+
+  // Print the safe values only if they are within the valid range
+  for (byte i = 0; i < channelAmount; i++)
+  {
+    if (safeValues[i] >= minPulseTime && safeValues[i] <= maxPulseTime)
     {
-        safeValues[i] = rawValues[i];
+      // Serial.print(safeValues[i]);
     }
-    interrupts();
-
-    // Print the safe values only if they are within the valid range
-    for (byte i = 0; i < channelAmount; i++)
+    else
     {
-        if (safeValues[i] >= minPulseTime && safeValues[i] <= maxPulseTime)
-        {
-            // Serial.print(safeValues[i]);
-        }
-        else
-        {
-            // Serial.print("Invalid"); // Show "Invalid" for any out-of-range value
-        }
-        // Serial.print("\t");
+      // Serial.print("Invalid"); // Show "Invalid" for any out-of-range value
     }
+    // Serial.print("\t");
+  }
 
-    // Serial.println();
-    delay(3);
+  // Serial.println();
+  delay(3);
 
-    x = map(safeValues[0], ch1min, ch2max, 0, 510) - 255;
-    y = map(safeValues[1], ch1min, ch1max, 0, 510) - 255;
-    z = map(safeValues[3], ch3min, ch3max, 0, 180);
-    z > 180 ? z = 180 : z = z;
-    z < 0 ? z = 0 : z = z;
-    motleftspeed = x - y;
-    motrightspeed = x + y;
-    //Serial.println(safeValues[3]);
-    //writeservo(z);
+  x = map(safeValues[0], ch1min, ch2max, 510, 0) - 255;
+  y = map(safeValues[1], ch1min, ch1max, 0, 510) - 255;
+  z = map(safeValues[3], ch3min, ch3max, 0, 180);
+  z > 180 ? z = 180 : z = z;
+  z < 0 ? z = 0 : z = z;
+  motleftspeed = x + y;
+  motrightspeed = x - y;
+  // Serial.println(safeValues[3]);
+  // writeservo(z);
 
-    motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
-    motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
-    motrightspeed < slow ? motrightspeed = slow : motrightspeed = motrightspeed;
-    motleftspeed < slow ? motleftspeed = slow : motleftspeed = motleftspeed;
-
-
+  motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
+  motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
+  motrightspeed < slow ? motrightspeed = slow : motrightspeed = motrightspeed;
+  motleftspeed < slow ? motleftspeed = slow : motleftspeed = motleftspeed;
+  if(safeValues[2] > 1200){
     if (x > 25 || x < -25 || y > 25 || y < -25)
-  {
-    if (motleftspeed > 0)
     {
-      leftmotbackward(abs(motleftspeed));
-      //Serial.println("yhn");
-     
-    }
-    else if (motleftspeed < 0)
-    {
+      if (motleftspeed > 0)
+      {
+        leftmotbackward(abs(motleftspeed));
+        // Serial.println("yhn");
+      }
+      else if (motleftspeed < 0)
+      {
 
-      leftmotforward(abs(motleftspeed));
-  
-    }
+        leftmotforward(abs(motleftspeed));
+      }
 
-    if (motrightspeed > 0)
-    {
-      rightmotforward(abs(motrightspeed));
-
+      if (motrightspeed > 0)
+      {
+        rightmotforward(abs(motrightspeed));
+      }
+      else if (motrightspeed < 0)
+      {
+        rightmotbackward(abs(motrightspeed));
+      }
     }
-    else if (motrightspeed < 0)
+    else
     {
-      rightmotbackward(abs(motrightspeed));
-  
+      StopMot();
     }
-  }
-  else
-  {
+  }else{
     StopMot();
-  }
+    }
 
-
-     Serial.print(x);
-     Serial.print("\t");
-     Serial.print(y);
-     Serial.print("\t");
-     Serial.print(motleftspeed);
-     Serial.print("\t");
-     Serial.print(motrightspeed);
-     Serial.print("\t");
-     Serial.println(z);
+  Serial.print(x);
+  Serial.print("\t");
+  Serial.print(y);
+  Serial.print("\t");
+  Serial.print(motleftspeed);
+  Serial.print("\t");
+  Serial.print(motrightspeed);
+  Serial.print("\t");
+  Serial.println(z);
 }

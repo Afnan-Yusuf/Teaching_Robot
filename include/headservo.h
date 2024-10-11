@@ -30,7 +30,7 @@ void headservoinit() {
 }
 
 void headservoSweep() {
-    myservo.write(90);
+    myservo.write(z);
 }
 
 void writeservo(int angle){

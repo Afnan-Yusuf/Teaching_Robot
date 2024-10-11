@@ -27,7 +27,6 @@ void initbt()
 
 void btcontrol()
 {
-    
 
     t = myramp.update();
     Serial.print(t);
@@ -38,93 +37,105 @@ void btcontrol()
     Serial.print("\t");
     Serial.println(obstacledetected);
     recvWithEndMarker();
-    if (obstacledetected == false)
+
+    switch (incomingData)
     {
-        
-        switch (incomingData)
+    case 'f': // Forward
+        if (obstacledetected == false)
         {
-        case 'f': // Forward
-           t = 0;
+            t = 0;
             myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
             fd(t);
             prevdata = incomingData;
             incomingData = 0;
-            break;
+        }
+        break;
 
-        case 'l': // Left turn
+    case 'l': // Left turn
+        if (obstacledetected == false)
+        {
             t = 0;
             myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
             lt(t);
             prevdata = incomingData;
             incomingData = 0;
-            break;
+        }
+        break;
 
-        case 'r': // Right turn
+    case 'r': // Right turn
+        if (obstacledetected == false)
+        {
             t = 0;
             myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
             rt(t);
             prevdata = incomingData;
             incomingData = 0;
-            break;
-
-        case 'b': // Backward
-            t = 0;
-            myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
-            bk(t);
-            prevdata = incomingData;
-            incomingData = 0;
-            break;
-
-        case 's': // Stop
-            t = 0;
-            myramp.go(stopspeed, deceltime, LINEAR, ONCEFORWARD);
-            if (prevdata == 'f')
-            {
-                fd(t);
-            }
-            else if (prevdata == 'l')
-            {
-                lt(t);
-            }
-            else if (prevdata == 'r')
-            {
-                rt(t);
-            }
-            else if (prevdata == 'b')
-            {
-                bk(t);
-            }
-            prevdata = prevdata;
-            incomingData = 0;
-            break;
-
-        default: // If no valid command is received
-            // Optionally handle unexpected input
-            break;
         }
-    }else if (obstacledetected == true){
-        if(incomingData == 'b'){
-             t = 0;
-            myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
-            bk(t);
-            prevdata = incomingData;
-            incomingData = 0;
-        }else{
-            incomingData = 's';
-            prevdata = 's';
-            t = 0;
-            StopMot();
-        }
-        
-        
+        break;
 
-        
+    case 'b': // Backward
+        t = 0;
+        myramp.go(speed, acceltime, LINEAR, ONCEFORWARD);
+        bk(t);
+        prevdata = incomingData;
+        incomingData = 0;
+        break;
+
+    case 's': // Stop
+        t = 0;
+        myramp.go(stopspeed, deceltime, LINEAR, ONCEFORWARD);
+        if (prevdata == 'f')
+        {
+            fd(t);
+        }
+        else if (prevdata == 'l')
+        {
+            lt(t);
+        }
+        else if (prevdata == 'r')
+        {
+            rt(t);
+        }
+        else if (prevdata == 'b')
+        {
+            bk(t);
+        }
+        prevdata = prevdata;
+        incomingData = 0;
+        break;
+
+    default: // If no valid command is received
+        // Optionally handle unexpected input
+        break;
     }
-    
-        // StopMot();  // Stop motors if an obstacle is detected
-    
-    if (!obstacledetected)
+    if (obstacledetected == true)
     {
+
+         t = 0;
+        myramp.go(stopspeed, deceltime, LINEAR, ONCEFORWARD);
+        if (prevdata == 'f')
+        {
+            fd(t);
+        }
+        else if (prevdata == 'l')
+        {
+            lt(t);
+        }
+        else if (prevdata == 'r')
+        {
+            rt(t);
+        }
+        else if (prevdata == 'b')
+        {
+            bk(t);
+        }
+        prevdata = prevdata;
+        incomingData = 0;
+    }
+
+    // StopMot();  // Stop motors if an obstacle is detected
+
+    
 
         if (prevdata == 'f')
         {
@@ -141,7 +152,9 @@ void btcontrol()
         else if (prevdata == 'b')
         {
             bk(t);
-        }else if (prevdata == 's'){
+        }
+        else if (prevdata == 's')
+        {
             if (prevdata == 'f')
             {
                 fd(t);
@@ -159,10 +172,7 @@ void btcontrol()
                 bk(t);
             }
         }
-    }
     
-    
-   
 }
 
 void recvWithEndMarker()
@@ -171,6 +181,6 @@ void recvWithEndMarker()
     {
         incomingData = BT.read();
         // btpidv(incomingData);
-        //Serial.println(incomingData);
+        // Serial.println(incomingData);
     }
 }
