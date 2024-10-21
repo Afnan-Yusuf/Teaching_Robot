@@ -3,8 +3,14 @@
 #include "BluetoothSerial.h"
 #include "ultrasonic.h"
 #include <Ramp.h>
+#include "arduinointerface.h"
+#include "headservo.h"
+
+extern int mode;
 
 ramp myramp;
+
+extern int ang;
 
 extern bool obstacledetected;
 
@@ -29,13 +35,13 @@ void btcontrol()
 {
 
     t = myramp.update();
-    Serial.print(t);
-    Serial.print("\t");
-    Serial.print(incomingData);
-    Serial.print("\t");
-    Serial.print(prevdata);
-    Serial.print("\t");
-    Serial.println(obstacledetected);
+    // Serial.print(t);
+    // Serial.print("\t");
+    // Serial.print(incomingData);
+    // Serial.print("\t");
+    // Serial.print(prevdata);
+    // Serial.print("\t");
+    // Serial.println(obstacledetected);
     recvWithEndMarker();
 
     switch (incomingData)
@@ -48,6 +54,7 @@ void btcontrol()
             fd(t);
             prevdata = incomingData;
             incomingData = 0;
+            mode = 2;
         }
         break;
 
@@ -102,8 +109,26 @@ void btcontrol()
         }
         prevdata = prevdata;
         incomingData = 0;
+        mode = 0;
         break;
-
+    case 'w': // Backward
+        mode = 0;
+        break;
+    case 'i': // Backward
+        mode = 2;
+        break;
+    case 'h': // Backward
+        mode = 1;
+        break;
+    case 'e': // Backward
+        writeservo(30);
+        break;
+    case 'v': // Backward
+        writeservo(150);
+        break;
+    case 'n': // Backward
+        mode = 1;
+        break;
     default: // If no valid command is received
         // Optionally handle unexpected input
         break;
@@ -171,8 +196,7 @@ void btcontrol()
             {
                 bk(t);
             }
-        }
-    
+        }   
 }
 
 void recvWithEndMarker()

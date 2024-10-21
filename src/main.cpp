@@ -5,7 +5,6 @@
 #include "blutooth.h"
 #include "scheduler.h"
 #include "ultrasonic.h"
-#include "neopixel.h"
 #include "arduinointerface.h"
 #include "headservo.h"
 #include "ct6b.h"
@@ -19,7 +18,6 @@ void setup() {
   InitMot();
   initsharpir();
   headservoinit();
-  rgbledinit();
   initserial2();
   initct6b();
   //InitMot();
@@ -39,8 +37,8 @@ void setup() {
 
 void loop() {
   ts.execute();
-  //arduinointerface();
- // rgbledcontrol();
-  runonct6b();
-  headservoSweep();
+  arduinointerface();
+  //runonct6b();
+  //headservoSweep();
+  updateServo();
 }

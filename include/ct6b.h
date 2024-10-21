@@ -131,13 +131,5 @@ void runonct6b()
     StopMot();
     }
 
-  Serial.print(x);
-  Serial.print("\t");
-  Serial.print(y);
-  Serial.print("\t");
-  Serial.print(motleftspeed);
-  Serial.print("\t");
-  Serial.print(motrightspeed);
-  Serial.print("\t");
-  Serial.println(z);
+  
 }

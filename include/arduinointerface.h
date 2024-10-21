@@ -3,20 +3,27 @@
 #define RXD2 16
 #define TXD2 17
 
+int modet = 0;
+
 int mode = 0;// 0 = walking; 1 = handshake; 2 = stop;
 
 void initserial2()
 {
-    Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
+    pinMode(RXD2, OUTPUT);
+    pinMode(TXD2, OUTPUT);
 }
 
 void arduinointerface(){
     if(mode == 0){
-        Serial2.println('w');
+        digitalWrite(RXD2, 0);
+        digitalWrite(TXD2, 0);
     }else if(mode == 1){
-        Serial2.println('h');
+        digitalWrite(RXD2, 0);
+        digitalWrite(TXD2, 1);
     }else if(mode == 2){
-        Serial2.println('s');
+        digitalWrite(RXD2, 1);
+        digitalWrite(TXD2, 1);
     }
-    delay(10);
+
+    //Serial.println(mode);
 }

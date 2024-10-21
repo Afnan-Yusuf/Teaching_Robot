@@ -2,13 +2,20 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>
 #include <Ramp.h>
-#include "scheduler.h"
 //#include "ct6b.h"
 
 extern int z;
 
-ramp servoramp;
+int ang;
+
+rampInt servoramp;
 int finalpos;
+
+unsigned long lastUpdateTime = 0;  // To store the last time the servo was updated
+int targetAngle = 90;              // Target angle for the servo to move to
+int currentPos = 90;               // Current position of the servo
+bool returningTo90 = false;        // Flag to check if we are returning to 90 degrees
+unsigned long targetHoldTime = 0;  // Time when the target angle was reached
 
 Servo myservo;
 int pos = 0; 
@@ -38,6 +45,7 @@ void headservoinit() {
     for (int i = 0; i < filterSize; i++) {
         zValues[i] = 0;
     }
+    
 }
 
 int filterZValue(int rawZ) {
@@ -55,15 +63,65 @@ int filterZValue(int rawZ) {
 }
 
 void headservoSweep() {
-    // Apply the moving average filter to the `z` value
-    int filteredZ = filterZValue(z);
-
-    // Write the filtered value to the servo
-    myservo.write(filteredZ);
+    myservo.write(90);
 }
 
-void writeservo(int angle){
-    finalpos = myramp.update();
-    myramp.go(angle, 100, LINEAR, ONCEFORWARD);
-    myservo.write(finalpos);
+void writeservo(int angle) {
+    targetAngle = angle;           // Set the new target angle
+    returningTo90 = false;         // Reset the flag for returning to 90 degrees
+    lastUpdateTime = millis();     // Store the current time
+}
+
+void updateServo() {
+    unsigned long currentTime = millis();
+    int increment = 1;  // Step size for the servo movement
+    unsigned long interval = 20;  // Time between steps (20 ms)
+
+    // Move the servo gradually if the target position has not been reached
+    if (!returningTo90 && currentPos != targetAngle) {
+        if (currentTime - lastUpdateTime >= interval) {
+            // Move the servo towards the target angle in steps
+            if (currentPos < targetAngle) {
+                currentPos += increment;
+                if (currentPos > targetAngle) currentPos = targetAngle;  // Ensure it doesn't overshoot
+            } else if (currentPos > targetAngle) {
+                currentPos -= increment;
+                if (currentPos < targetAngle) currentPos = targetAngle;  // Ensure it doesn't overshoot
+            }
+            
+            // Write the new position to the servo
+            myservo.write(currentPos);
+            lastUpdateTime = currentTime;  // Update the last time we moved the servo
+        }
+    }
+
+    // Check if the servo has reached the target angle and start counting the hold time
+    if (currentPos == targetAngle && !returningTo90) {
+        if (targetHoldTime == 0) {
+            targetHoldTime = currentTime;  // Start timing the 2500ms hold
+        }
+
+        // Wait for 2500ms before returning to 90 degrees
+        if (currentTime - targetHoldTime >= 2500) {
+            returningTo90 = true;  // Start returning to 90 degrees
+            targetAngle = 90;      // Set the target angle to 90
+            targetHoldTime = 0;    // Reset the hold timer
+        }
+    }
+
+    // Move the servo back to 90 degrees in the same manner
+    if (returningTo90 && currentPos != 90) {
+        if (currentTime - lastUpdateTime >= interval) {
+            if (currentPos < 90) {
+                currentPos += increment;
+                if (currentPos > 90) currentPos = 90;
+            } else if (currentPos > 90) {
+                currentPos -= increment;
+                if (currentPos < 90) currentPos = 90;
+            }
+
+            myservo.write(currentPos);
+            lastUpdateTime = currentTime;  // Update the last time we moved the servo
+        }
+    }
 }
