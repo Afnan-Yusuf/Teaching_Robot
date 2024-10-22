@@ -63,7 +63,7 @@ int filterZValue(int rawZ) {
 }
 
 void headservoSweep() {
-    myservo.write(filterZValue(z));
+    myservo.write(90);
 }
 
 void writeservo(int angle) {
