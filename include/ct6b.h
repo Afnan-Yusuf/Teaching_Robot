@@ -100,21 +100,22 @@ void runonct6b()
 
     // Apply the moving average filter to safeValues[5]
     safeValues[5] = applyMovingAverage(safeValues[5]);
+    safeValues[3] = applyMovingAverage(safeValues[3]);
 
     // Example: use filtered safeValues[5] to determine mode
     if (safeValues[5] > 1000 && safeValues[5] < 1300) {
         mode = 1;
     } else if (safeValues[5] > 1300 && safeValues[5] < 1700) {
-        mode = 2;
-    } else if (safeValues[5] > 1700) {
         mode = 0;
+    } else if (safeValues[5] > 1700) {
+        mode = 2;
     }
-    Serial.println(mode);
+    Serial.println(safeValues[3]);
 
     // Continue with your logic (motor control, etc.)
     x = map(safeValues[0], ch1min, ch2max, 510, 0) - 255;
     y = map(safeValues[1], ch1min, ch1max, 0, 510) - 255;
-    z = map(safeValues[3], ch3min, ch3max, 180, 0);
+    z = map(safeValues[3], 1490, 1930, 180, 0);
     z = constrain(z, 0, 180);
     
     motleftspeed = x + y;

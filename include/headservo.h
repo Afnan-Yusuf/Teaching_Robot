@@ -64,6 +64,7 @@ int filterZValue(int rawZ) {
 
 void headservoSweep() {
     myservo.write(90);
+    //Serial.println(z);
 }
 
 void writeservo(int angle) {

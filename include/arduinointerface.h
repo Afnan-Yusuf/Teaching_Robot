@@ -11,7 +11,7 @@ void initserial2() {
 }
 
 void arduinointerface() {
-    //if (mode != modet) {  // Only proceed if the mode has changed
+    if (mode != modet) {  // Only proceed if the mode has changed
         if (mode == 0) {
             Serial1.println('1');
         } else if (mode == 1) {
@@ -21,7 +21,7 @@ void arduinointerface() {
         }
 
         modet = mode;  // Update the last mode to the current one
-    //}
+    }
 
     //Serial.println(mode);  // Optional for debugging
 }
