@@ -3,27 +3,25 @@
 #define RXD2 16
 #define TXD2 17
 
-int modet = 0;
+int modet = 0;  // This will store the last mode value
+int mode = 0;   // 0 = walking; 1 = handshake; 2 = stop;
 
-int mode = 0;// 0 = walking; 1 = handshake; 2 = stop;
-
-void initserial2()
-{
-    pinMode(RXD2, OUTPUT);
-    pinMode(TXD2, OUTPUT);
+void initserial2() {
+    Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
 }
 
-void arduinointerface(){
-    if(mode == 0){
-        digitalWrite(RXD2, 0);
-        digitalWrite(TXD2, 0);
-    }else if(mode == 1){
-        digitalWrite(RXD2, 0);
-        digitalWrite(TXD2, 1);
-    }else if(mode == 2){
-        digitalWrite(RXD2, 1);
-        digitalWrite(TXD2, 1);
-    }
+void arduinointerface() {
+    //if (mode != modet) {  // Only proceed if the mode has changed
+        if (mode == 0) {
+            Serial1.println('1');
+        } else if (mode == 1) {
+            Serial1.println('2');
+        } else if (mode == 2) {
+            Serial1.println('3');
+        }
 
-    //Serial.println(mode);
+        modet = mode;  // Update the last mode to the current one
+    //}
+
+    //Serial.println(mode);  // Optional for debugging
 }

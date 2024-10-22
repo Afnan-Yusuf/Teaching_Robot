@@ -1,8 +1,10 @@
 #include <Arduino.h>
+#include "arduinointerface.h"
+extern int mode;
 
 const byte interruptPin = 33;
 const byte channelAmount = 6;
-const unsigned long blankTime = 4000;
+const unsigned long blankTime = 3000;
 const unsigned long failsafeTimeout = 50000;
 const unsigned long minPulseTime = 800;  // Minimum valid pulse width (in microseconds)
 const unsigned long maxPulseTime = 2100; // Maximum valid pulse width (in microseconds)
@@ -62,7 +64,7 @@ void runonct6b()
   unsigned long safeValues[channelAmount];
 
   // Disable interrupts to safely read shared values
-  noInterrupts();
+  //noInterrupts();
   for (byte i = 0; i < channelAmount; i++)
   {
     safeValues[i] = rawValues[i];
@@ -93,14 +95,24 @@ void runonct6b()
   z < 0 ? z = 0 : z = z;
   motleftspeed = x + y;
   motrightspeed = x - y;
-  // Serial.println(safeValues[3]);
-  // writeservo(z);
+  //Serial.println(map(safeValues[5], 1000, 2000, 0, 3));
+  //mode = map(safeValues[5], 1000, 2000, 0, 2);
+  //Serial.println(mode);
+  // if(safeValues[5] > 1000 && safeValues[5] < 1300){
+  //   mode = 1;
+  // }else if(safeValues[5] > 1300 && safeValues[5] < 1700){
+  //   mode = 2;
+  // }else if(safeValues[5] > 1700){
+  //   mode = 0;
+  // }
+
+   //writeservo(z);
 
   motrightspeed > maxspeed ? motrightspeed = maxspeed : motrightspeed = motrightspeed;
   motleftspeed > maxspeed ? motleftspeed = maxspeed : motleftspeed = motleftspeed;
   motrightspeed < slow ? motrightspeed = slow : motrightspeed = motrightspeed;
   motleftspeed < slow ? motleftspeed = slow : motleftspeed = motleftspeed;
-  if(safeValues[2] > 1200){
+  if(safeValues[2] > 1700){
     if (x > 25 || x < -25 || y > 25 || y < -25)
     {
       if (motleftspeed > 0)

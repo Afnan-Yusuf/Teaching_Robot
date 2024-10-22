@@ -63,7 +63,7 @@ int filterZValue(int rawZ) {
 }
 
 void headservoSweep() {
-    myservo.write(90);
+    myservo.write(filterZValue(z));
 }
 
 void writeservo(int angle) {
@@ -72,56 +72,3 @@ void writeservo(int angle) {
     lastUpdateTime = millis();     // Store the current time
 }
 
-void updateServo() {
-    unsigned long currentTime = millis();
-    int increment = 1;  // Step size for the servo movement
-    unsigned long interval = 20;  // Time between steps (20 ms)
-
-    // Move the servo gradually if the target position has not been reached
-    if (!returningTo90 && currentPos != targetAngle) {
-        if (currentTime - lastUpdateTime >= interval) {
-            // Move the servo towards the target angle in steps
-            if (currentPos < targetAngle) {
-                currentPos += increment;
-                if (currentPos > targetAngle) currentPos = targetAngle;  // Ensure it doesn't overshoot
-            } else if (currentPos > targetAngle) {
-                currentPos -= increment;
-                if (currentPos < targetAngle) currentPos = targetAngle;  // Ensure it doesn't overshoot
-            }
-            
-            // Write the new position to the servo
-            myservo.write(currentPos);
-            lastUpdateTime = currentTime;  // Update the last time we moved the servo
-        }
-    }
-
-    // Check if the servo has reached the target angle and start counting the hold time
-    if (currentPos == targetAngle && !returningTo90) {
-        if (targetHoldTime == 0) {
-            targetHoldTime = currentTime;  // Start timing the 2500ms hold
-        }
-
-        // Wait for 2500ms before returning to 90 degrees
-        if (currentTime - targetHoldTime >= 2500) {
-            returningTo90 = true;  // Start returning to 90 degrees
-            targetAngle = 90;      // Set the target angle to 90
-            targetHoldTime = 0;    // Reset the hold timer
-        }
-    }
-
-    // Move the servo back to 90 degrees in the same manner
-    if (returningTo90 && currentPos != 90) {
-        if (currentTime - lastUpdateTime >= interval) {
-            if (currentPos < 90) {
-                currentPos += increment;
-                if (currentPos > 90) currentPos = 90;
-            } else if (currentPos > 90) {
-                currentPos -= increment;
-                if (currentPos < 90) currentPos = 90;
-            }
-
-            myservo.write(currentPos);
-            lastUpdateTime = currentTime;  // Update the last time we moved the servo
-        }
-    }
-}
